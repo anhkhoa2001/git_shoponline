@@ -702,6 +702,7 @@ function updateTableOrders(urlData) {
 					+ "	                                        <td>Checkout</td>\r\n"
 					+ "	                                        <td>"+ d.created +"</td>\r\n"
 					+ "	                                        <td>\r\n"
+					+ "	                                            <a href=\"#\" onclick = \"viewOrders(this, '"+ d.ordinal +"')\"><i class=\"las la-eye text-secondary font-16\"></i></a>\r\n"
 					+ "	                                            <a href=\"#\" onclick = \"deleteOrders(this, '"+ d.ordinal +"')\"><i class=\"las la-trash-alt text-secondary font-16\"></i></a>\r\n"
 					+ "	                                        </td>\r\n"
 					+ "	                                    </tr>";
@@ -733,7 +734,40 @@ function deleteOrders(element, id) {
 	});
 }
 
+function closeOrders(element) {
+    document.querySelector(".orders_content.open").classList.remove("open");
+}
 
+function viewOrders(element, id) {
+	fetch("/myspring/apimanage/orders/view?id=" + id, { 
+		method: 'GET',
+	})
+	.then(response => response.json())
+	.then(data => {
+	  	console.log(data);
+		let dataHTML = "";
+		for(var d of data) {
+			var name = d.code.split('|||')[1];
+			var code = d.code.split('|||')[0];
+			var image = d.code.split('|||')[2];
+			dataHTML += "<tr>\r\n"
+					+ "	                            <td>\r\n"
+					+ "	                                <span>\r\n"
+					+ "	                                    <img src=\""+ image +"\" alt=\"\">\r\n"
+					+ "	                                    <span>\r\n"
+					+ "	                                        <span>"+ name +"</span>\r\n"
+					+ "	                                        "+ code +"\r\n"
+					+ "	                                    </span>\r\n"
+					+ "	                                </span>\r\n"
+					+ "	                            </td>\r\n"
+					+ "	                            <td>"+ d.quantity +"</td>\r\n"
+					+ "	                            <td>$"+ d.total +"</td>\r\n"
+					+ "	                        </tr>";
+		}
+		document.querySelector(".order_product tbody").innerHTML = dataHTML;
+		document.querySelector(".orders_content.orders").classList.add("open");
+	});
+}
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////

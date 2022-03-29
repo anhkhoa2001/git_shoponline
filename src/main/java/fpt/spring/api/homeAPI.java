@@ -580,6 +580,23 @@ public class homeAPI {
 		return jsonObject.toJSONString();
 	}
 		
+	
+	@RequestMapping(value = "/apimanage/orders/view", method = RequestMethod.GET, produces = "application/json; charset=UTF-8")
+	@ResponseBody
+	public List<OrderProduct> apiManageOrderPut(HttpServletRequest request, Model model) {
+		List<OrderProduct> list2 = orderProductService.findAll();
+		int id = request.getParameter("id") != null ? Integer.parseInt(request.getParameter("id")) : 0;
+		List<OrderProduct> list = new ArrayList<>();
+		for(OrderProduct orderProduct : list2) {
+			if(orderProduct.getOrders().getId() == id) {
+				String name = orderProductService.convertCodeToString(orderProduct.getCode());
+				orderProduct.setCode(name);
+				list.add(orderProduct);
+			}
+		}
+		
+		return list;
+	}
 		
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/apimanage/account", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")

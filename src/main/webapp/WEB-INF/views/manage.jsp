@@ -768,6 +768,24 @@
 		                </div>
 		            </div>
 		        </div>
+		        <div class="orders_content orders">
+	            <div class = "orders_content_grid">
+	                <i class="dripicons-cross" onclick="closeOrders(this)"></i>
+	                <h2 class="title">Order Details</h2>
+	                <table class = "order_product">
+	                    <thead>
+	                        <tr>
+	                            <th>Info</th>
+	                            <th>Quantity</th>
+	                            <th>Price</th>
+	                        </tr>
+	                    </thead>
+	                    <tbody>
+	                        
+	                    </tbody>
+	                </table>
+	            </div>
+	        </div>
 			
             
 
