@@ -31,6 +31,17 @@ public class AccountService {
 		accountRespository.delete(id);
 	}
 	
+	public Account getAccountByUsername(String username) {
+		int id = 0;
+		List<Account> list = findAll();
+		for(Account account:list) {
+			if(account.getUsername().equals(username)) {
+				id = account.getId();
+			}
+		}
+		return accountRespository.findOne(id);
+	}
+	
 	public void save(Account account) {
 		accountRespository.save(account);
 	}

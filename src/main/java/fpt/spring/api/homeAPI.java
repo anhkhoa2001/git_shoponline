@@ -1,14 +1,24 @@
 package fpt.spring.api;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -20,7 +30,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import fpt.spring.main.Main;
 import fpt.spring.model.Account;
@@ -36,6 +48,7 @@ import fpt.spring.service.LaptopService;
 import fpt.spring.service.OrderProductService;
 import fpt.spring.service.OrdersService;
 import fpt.spring.service.PhoneTabService;
+import javassist.expr.NewArray;
 
 @Controller
 public class homeAPI {
@@ -641,64 +654,65 @@ public class homeAPI {
 		return jsonObject.toJSONString();
 	}
 	
-	@RequestMapping(value = "/apimanage/product/add", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ResponseBody
-	public String apiManageProductAdd(HttpServletRequest request, Model model, @RequestBody String data) {
-		String line = request.getParameter("line");
-		JSONParser parser = new JSONParser();
-		if(line.equals("phone") || line.equals("tablet")) {
-			try {
-				JSONObject jsonObject = (JSONObject) parser.parse(data);
-				String name = jsonObject.get("name").toString();
-				String code = jsonObject.get("code").toString();
-				int quantity = ((Long) jsonObject.get("quantity")).intValue();
-				int price = ((Long) jsonObject.get("price")).intValue();
-				String screen = jsonObject.get("screen").toString();
-				String chip = jsonObject.get("chip").toString();
-				String ram = jsonObject.get("ram").toString();
-				String front = jsonObject.get("front").toString();
-				String back = jsonObject.get("back").toString();
-				String memory = jsonObject.get("memory").toString();
-				String file = jsonObject.get("file").toString();
-				PhoneTab phoneTab = new PhoneTab(name, code, price*Main.dola, quantity, screen, front, back, chip, memory, ram, file);
-				System.out.println(phoneTab.getCode());
-				Category category = categoryService.findCategory(code);
-				phoneTab.setCategory(category);
-				System.out.println(phoneTab.getCode());
-				phoneTabService.save(phoneTab);
-				return "1";
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-		} else {
-			try {
-				JSONObject jsonObject = (JSONObject) parser.parse(data);
-				String name = jsonObject.get("name").toString();
-				String code = jsonObject.get("code").toString();
-				int quantity = ((Long) jsonObject.get("quantity")).intValue();
-				int price = ((Long) jsonObject.get("price")).intValue();
-				String display = jsonObject.get("display").toString();
-				String card = jsonObject.get("card").toString();
-				String ram = jsonObject.get("ram").toString();
-				String cpu = jsonObject.get("cpu").toString();
-				String w = jsonObject.get("weight").toString();
-				float weight = Float.valueOf(w);
-				String size = jsonObject.get("size").toString();
-				String memory = jsonObject.get("memory").toString();
-				String file = jsonObject.get("file").toString();
-				Laptop laptop = new Laptop(name, code, price, quantity, display, memory, cpu, ram, card, weight, size, file);
-				
-				Category category = categoryService.findCategory(code);
-				laptop.setCategory(category);
-				
-				laptopService.save(laptop);
-				return "1";
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-		}
-		return null;
-	}
+//	@RequestMapping(value = "/apimanage/product/add", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+//	@ResponseBody
+//	public String apiManageProductAdd(HttpServletRequest request, Model model, @RequestBody String data) {
+//		String line = request.getParameter("line");
+//		JSONParser parser = new JSONParser();
+//		if(line.equals("phone") || line.equals("tablet")) {
+//			try {
+//				JSONObject jsonObject = (JSONObject) parser.parse(data);
+//				String name = jsonObject.get("name").toString();
+//				String code = jsonObject.get("code").toString();
+//				int quantity = ((Long) jsonObject.get("quantity")).intValue();
+//				int price = ((Long) jsonObject.get("price")).intValue();
+//				String screen = jsonObject.get("screen").toString();
+//				String chip = jsonObject.get("chip").toString();
+//				String ram = jsonObject.get("ram").toString();
+//				String front = jsonObject.get("front").toString();
+//				String back = jsonObject.get("back").toString();
+//				String memory = jsonObject.get("memory").toString();
+//				String file = jsonObject.get("file").toString();
+//				PhoneTab phoneTab = new PhoneTab(name, code, price*Main.dola, quantity, screen, front, back, chip, memory, ram, file);
+//				System.out.println(phoneTab.getCode());
+//				Category category = categoryService.findCategory(code);
+//				phoneTab.setCategory(category);
+//				System.out.println(phoneTab.getCode());
+//				phoneTabService.save(phoneTab);
+//				return "1";
+//			} catch (ParseException e) {
+//				e.printStackTrace();
+//			}
+//		} else {
+//			try {
+//				JSONObject jsonObject = (JSONObject) parser.parse(data);
+//				String name = jsonObject.get("name").toString();
+//				String code = jsonObject.get("code").toString();
+//				int quantity = ((Long) jsonObject.get("quantity")).intValue();
+//				int price = ((Long) jsonObject.get("price")).intValue();
+//				String display = jsonObject.get("display").toString();
+//				String card = jsonObject.get("card").toString();
+//				String ram = jsonObject.get("ram").toString();
+//				String cpu = jsonObject.get("cpu").toString();
+//				String w = jsonObject.get("weight").toString();
+//				float weight = Float.valueOf(w);
+//				String size = jsonObject.get("size").toString();
+//				String memory = jsonObject.get("memory").toString();
+//				String file = jsonObject.get("file").toString();
+//				Laptop laptop = new Laptop(name, code, price, quantity, display, memory, cpu, ram, card, weight, size, file);
+//				
+//				Category category = categoryService.findCategory(code);
+//				laptop.setCategory(category);
+//				
+//				laptopService.save(laptop);
+//				return "1";
+//			} catch (ParseException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//		return null;
+//	}
+	
 	
 	
 	@RequestMapping(value = "/apimanage/product/edit", method = RequestMethod.GET)
@@ -730,92 +744,92 @@ public class homeAPI {
 		}
 	}
 	
-	@RequestMapping(value = "/apimanage/product/edit", method = RequestMethod.PUT)
-	@ResponseBody
-	public String apiManageProductEdit(HttpServletRequest request, Model model, @RequestBody String data) {
-		String line = request.getParameter("line");
-		JSONParser parser = new JSONParser();
-		if(line.equals("phone") || line.equals("tablet")) {
-			try {
-				JSONObject jsonObject = (JSONObject) parser.parse(data);
-				int id = ((Long) jsonObject.get("id")).intValue();
-				String name = jsonObject.get("name").toString();
-				String code = jsonObject.get("code").toString();
-				int quantity = ((Long) jsonObject.get("quantity")).intValue();
-				int price = ((Long) jsonObject.get("price")).intValue();
-				String screen = jsonObject.get("screen").toString();
-				String chip = jsonObject.get("chip").toString();
-				String ram = jsonObject.get("ram").toString();
-				String front = jsonObject.get("front").toString();
-				String back = jsonObject.get("back").toString();
-				String memory = jsonObject.get("memory").toString();
-				String file = jsonObject.get("file").toString();
-				PhoneTab phoneTab2 = Main.dao.findPhoneTab(id);
-				phoneTab2.setCode(code);
-				phoneTab2.setName(name);
-				phoneTab2.setQuantityStock(quantity);
-				phoneTab2.setPrice(price*Main.dola);
-				phoneTab2.setScreen(screen);
-				phoneTab2.setChip(chip);
-				phoneTab2.setRam(ram);
-				phoneTab2.setFrontCamera(front);
-				phoneTab2.setBackCamera(back);
-				phoneTab2.setMemory(memory);
-				if(!file.contains("undefined")) {
-					phoneTab2.setImage(file);
-				}
-				
-				Category category = categoryService.findCategory(code);
-				phoneTab2.setCategory(category);
-				phoneTabService.update(phoneTab2);
-				return "1";
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-		} else {
-			try {
-				JSONObject jsonObject = (JSONObject) parser.parse(data);
-				int id = ((Long) jsonObject.get("id")).intValue();
-				String name = jsonObject.get("name").toString();
-				String code = jsonObject.get("code").toString();
-				int quantity = ((Long) jsonObject.get("quantity")).intValue();
-				int price = ((Long) jsonObject.get("price")).intValue();
-				String display = jsonObject.get("display").toString();
-				String card = jsonObject.get("card").toString();
-				String ram = jsonObject.get("ram").toString();
-				String cpu = jsonObject.get("cpu").toString();
-				String w = jsonObject.get("weight").toString();
-				float weight = Float.valueOf(w);
-				String size = jsonObject.get("size").toString();
-				String memory = jsonObject.get("memory").toString();
-				String file = jsonObject.get("file").toString();
-				
-				Laptop laptop = Main.dao.findLaptop(id);
-				laptop.setCode(code);
-				laptop.setName(name);
-				laptop.setQuantityStock(quantity);
-				laptop.setPrice(price*Main.dola);
-				laptop.setDisplay(display);
-				laptop.setWeight(weight);
-				laptop.setSize(size);
-				laptop.setRam(ram);
-				laptop.setCpu(cpu);
-				laptop.setCard(card);
-				laptop.setMemory(memory);
-				if(!file.contains("undefined")) {
-					laptop.setImage(file);
-				}
-				
-				Category category = categoryService.findCategory(code);
-				laptop.setCategory(category);
-				laptopService.update(laptop);
-				return "1";
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-		}
-		return null;
-	}
+//	@RequestMapping(value = "/apimanage/product/edit", method = RequestMethod.PUT)
+//	@ResponseBody
+//	public String apiManageProductEdit(HttpServletRequest request, Model model, @RequestBody String data) {
+//		String line = request.getParameter("line");
+//		JSONParser parser = new JSONParser();
+//		if(line.equals("phone") || line.equals("tablet")) {
+//			try {
+//				JSONObject jsonObject = (JSONObject) parser.parse(data);
+//				int id = ((Long) jsonObject.get("id")).intValue();
+//				String name = jsonObject.get("name").toString();
+//				String code = jsonObject.get("code").toString();
+//				int quantity = ((Long) jsonObject.get("quantity")).intValue();
+//				int price = ((Long) jsonObject.get("price")).intValue();
+//				String screen = jsonObject.get("screen").toString();
+//				String chip = jsonObject.get("chip").toString();
+//				String ram = jsonObject.get("ram").toString();
+//				String front = jsonObject.get("front").toString();
+//				String back = jsonObject.get("back").toString();
+//				String memory = jsonObject.get("memory").toString();
+//				String file = jsonObject.get("file").toString();
+//				PhoneTab phoneTab2 = Main.dao.findPhoneTab(id);
+//				phoneTab2.setCode(code);
+//				phoneTab2.setName(name);
+//				phoneTab2.setQuantityStock(quantity);
+//				phoneTab2.setPrice(price*Main.dola);
+//				phoneTab2.setScreen(screen);
+//				phoneTab2.setChip(chip);
+//				phoneTab2.setRam(ram);
+//				phoneTab2.setFrontCamera(front);
+//				phoneTab2.setBackCamera(back);
+//				phoneTab2.setMemory(memory);
+//				if(!file.contains("undefined")) {
+//					phoneTab2.setImage(file);
+//				}
+//				
+//				Category category = categoryService.findCategory(code);
+//				phoneTab2.setCategory(category);
+//				phoneTabService.update(phoneTab2);
+//				return "1";
+//			} catch (ParseException e) {
+//				e.printStackTrace();
+//			}
+//		} else {
+//			try {
+//				JSONObject jsonObject = (JSONObject) parser.parse(data);
+//				int id = ((Long) jsonObject.get("id")).intValue();
+//				String name = jsonObject.get("name").toString();
+//				String code = jsonObject.get("code").toString();
+//				int quantity = ((Long) jsonObject.get("quantity")).intValue();
+//				int price = ((Long) jsonObject.get("price")).intValue();
+//				String display = jsonObject.get("display").toString();
+//				String card = jsonObject.get("card").toString();
+//				String ram = jsonObject.get("ram").toString();
+//				String cpu = jsonObject.get("cpu").toString();
+//				String w = jsonObject.get("weight").toString();
+//				float weight = Float.valueOf(w);
+//				String size = jsonObject.get("size").toString();
+//				String memory = jsonObject.get("memory").toString();
+//				String file = jsonObject.get("file").toString();
+//				
+//				Laptop laptop = Main.dao.findLaptop(id);
+//				laptop.setCode(code);
+//				laptop.setName(name);
+//				laptop.setQuantityStock(quantity);
+//				laptop.setPrice(price*Main.dola);
+//				laptop.setDisplay(display);
+//				laptop.setWeight(weight);
+//				laptop.setSize(size);
+//				laptop.setRam(ram);
+//				laptop.setCpu(cpu);
+//				laptop.setCard(card);
+//				laptop.setMemory(memory);
+//				if(!file.contains("undefined")) {
+//					laptop.setImage(file);
+//				}
+//				
+//				Category category = categoryService.findCategory(code);
+//				laptop.setCategory(category);
+//				laptopService.update(laptop);
+//				return "1";
+//			} catch (ParseException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//		return null;
+//	}
 	
 	@RequestMapping(value = "/apimanage/product/delete", method = RequestMethod.GET)
 	@ResponseBody
@@ -866,28 +880,228 @@ public class homeAPI {
 		return "1";
 	}
 	
-	@RequestMapping(value = "/registor", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+	@RequestMapping(value = "/apimanage/add/headphone", method = RequestMethod.POST)
 	@ResponseBody
-	public String registor(HttpServletRequest request, @RequestBody String data, Model model) {
-		JSONParser parser = new JSONParser();  
-		try {
-			JSONObject jsonObject = (JSONObject) parser.parse(data);
-			String name = jsonObject.get("name").toString();
-			String phone = jsonObject.get("phone").toString();
-			String email = jsonObject.get("email").toString();
-			String username = jsonObject.get("username").toString();
-			String pass = jsonObject.get("pass").toString();
-			String address = jsonObject.get("address").toString();
-			String role = "CUSTOMER";
-			String date = Main.day.format(Main.localDate);
-			
-			Account account = new Account(username, address, role, date, email, name, pass, phone);
-			accountService.save(account);
-			return "1";
-		} catch (ParseException e) {
-			e.printStackTrace();
+	public void apiManageTest(@RequestParam(value = "image", required = false) MultipartFile file, HttpServletRequest request) {
+		System.out.println(request.getParameter("name"));
+		System.out.println(request.getParameter("id"));
+		if(file != null && !file.isEmpty()) {
+			try {
+				byte[] bytes = file.getBytes();
+				String rootPath = Main.FILE_PATH_UPLOAD_IMAGE;
+				File dir = new File(rootPath + File.separator + "uploads"); 
+				
+				if(!dir.exists()) {
+					dir.mkdir();
+				}
+				String name = file.getOriginalFilename();
+				System.out.println(name);
+				System.out.println(name.equals(""));
+				File saveFile  = new File(dir.getAbsoluteFile() + File.separator + name);
+				System.out.println("Success " + saveFile.getPath());
+				
+				BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(saveFile));
+				stream.write(bytes);
+				stream.close();
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			System.out.println("empty");
 		}
 		
-		return null;
+	}
+	
+	
+	@RequestMapping(value = "/apimanage/product/add", method = RequestMethod.POST)
+	@ResponseBody
+	public void apiManageProductAdd(HttpServletRequest request, HttpServletResponse response,
+			@RequestParam(value = "image", required = false) MultipartFile file) throws IOException {
+		response.setContentType("text/html;charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		String line = request.getParameter("line");
+		String fileName = null;
+		if(file != null && !file.isEmpty()) {
+			try {
+				byte[] bytes = file.getBytes();
+				String rootPath = Main.FILE_PATH_UPLOAD_IMAGE;
+				File dir = new File(rootPath + File.separator + "uploads"); 
+				
+				if(!dir.exists()) {
+					dir.mkdir();
+				}
+				String name = file.getOriginalFilename();
+				
+				File saveFile  = new File(dir.getAbsoluteFile() + File.separator + name);
+				System.out.println("Success " + saveFile.getPath());
+				
+				BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(saveFile));
+				stream.write(bytes);
+				stream.close();
+				
+				fileName = Main.FILE_PATH_LOCAL_IMAGE + name;
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+		}
+		
+		String name = request.getParameter("name");
+		String code = request.getParameter("code");
+		int quantity = request.getParameter("quantity") != null ? Integer.parseInt(request.getParameter("quantity")) : 0;
+		int price = request.getParameter("price") != null ? Integer.parseInt(request.getParameter("price")) : 0;
+		
+		if(line.equals("phone") || line.equals("tablet")) {
+			String screen = request.getParameter("screen");
+			String chip = request.getParameter("chip");
+			String ram = request.getParameter("ram");
+			String front = request.getParameter("front");
+			String back = request.getParameter("back");
+			String memory = request.getParameter("memory");
+			PhoneTab phoneTab = new PhoneTab(name, code, price*Main.dola, quantity, screen, 
+					front, back, chip, memory, ram, fileName);
+			Category category = categoryService.findCategory(code);
+			phoneTab.setCategory(category);
+			try {
+				phoneTabService.save(phoneTab);
+				out.print("<script language=\"javascript\">alert('Thêm sản phẩm thành công');"
+						+ "window.location.href='/myspring/manage'</script>");
+			} catch (Exception e) {
+				out.print("<script language=\"javascript\">alert('Thêm sản phẩm thất bại');"
+						+ "window.location.href='/myspring/manage'</script>");
+			}
+		} else {
+			String display = request.getParameter("display");
+			String card = request.getParameter("card");
+			String ram = request.getParameter("ram");
+			String cpu = request.getParameter("cpu");
+			float weight = request.getParameter("weight") != null ? Float.parseFloat(request.getParameter("weight")) : 0;
+			String size = request.getParameter("size");
+			String memory = request.getParameter("memory");
+			Laptop laptop = new Laptop(name, code, price, quantity, display, memory, cpu, 
+					ram, card, weight, size, fileName);
+			
+			Category category = categoryService.findCategory(code);
+			laptop.setCategory(category);
+			
+			
+			try {
+				laptopService.save(laptop);
+				out.print("<script language=\"javascript\">alert('Thêm sản phẩm thành công');"
+						+ "window.location.href='/myspring/manage'</script>");
+			} catch (Exception e) {
+				out.print("<script language=\"javascript\">alert('Thêm sản phẩm thất bại');"
+						+ "window.location.href='/myspring/manage'</script>");
+			}
+		}
+	}
+	
+	
+	@RequestMapping(value = "/apimanage/product/edit", method = RequestMethod.POST)
+	@ResponseBody
+	public void apiManageProductEdit(HttpServletRequest request, HttpServletResponse response,
+			@RequestParam(value = "image", required = false) MultipartFile file) throws IOException {
+		response.setContentType("text/html;charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		String line = request.getParameter("line");
+		String fileName = null;
+		if(file != null && !file.isEmpty()) {
+			try {
+				byte[] bytes = file.getBytes();
+				String rootPath = Main.FILE_PATH_UPLOAD_IMAGE;
+				File dir = new File(rootPath + File.separator + "uploads"); 
+				
+				if(!dir.exists()) {
+					dir.mkdir();
+				}
+				String name = file.getOriginalFilename();
+				
+				File saveFile  = new File(dir.getAbsoluteFile() + File.separator + name);
+				System.out.println("Success " + saveFile.getPath());
+				
+				BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(saveFile));
+				stream.write(bytes);
+				stream.close();
+				
+				fileName = Main.FILE_PATH_LOCAL_IMAGE + name;
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		String name = request.getParameter("name");
+		String code = request.getParameter("code");
+		int quantity = request.getParameter("quantity") != null ? Integer.parseInt(request.getParameter("quantity")) : 0;
+		int price = request.getParameter("price") != null ? Integer.parseInt(request.getParameter("price")) : 0;
+		int id = request.getParameter("id") != null ? Integer.parseInt(request.getParameter("id")) : 0;
+		if(line.equals("phone") || line.equals("tablet")) {
+			String screen = request.getParameter("screen");
+			String chip = request.getParameter("chip");
+			String ram = request.getParameter("ram");
+			String front = request.getParameter("front");
+			String back = request.getParameter("back");
+			String memory = request.getParameter("memory");
+			
+			PhoneTab phoneTab2 = phoneTabService.findById(id);
+			phoneTab2.setCode(code);
+			phoneTab2.setName(name);
+			phoneTab2.setQuantityStock(quantity);
+			phoneTab2.setPrice(price*Main.dola);
+			phoneTab2.setScreen(screen);
+			phoneTab2.setChip(chip);
+			phoneTab2.setRam(ram);
+			phoneTab2.setFrontCamera(front);
+			phoneTab2.setBackCamera(back);
+			phoneTab2.setMemory(memory);
+			phoneTab2.setImage(fileName != null ? fileName : phoneTab2.getImage());
+			
+			Category category = categoryService.findCategory(code);
+			phoneTab2.setCategory(category);
+			try {
+				phoneTabService.update(phoneTab2);
+				out.print("<script language=\"javascript\">alert('Sửa sản phẩm thành công');"
+						+ "window.location.href='/myspring/manage'</script>");
+			} catch (Exception e) {
+				out.print("<script language=\"javascript\">alert('Sửa sản phẩm thất bại');"
+						+ "window.location.href='/myspring/manage'</script>");
+			}
+		} else {
+			String display = request.getParameter("display");
+			String card = request.getParameter("card");
+			String ram = request.getParameter("ram");
+			String cpu = request.getParameter("cpu");
+			float weight = request.getParameter("weight") != null ? Float.parseFloat(request.getParameter("weight")) : 0;
+			String size = request.getParameter("size");
+			String memory = request.getParameter("memory");
+			
+			Laptop laptop = Main.dao.findLaptop(id);
+			laptop.setCode(code);
+			laptop.setName(name);
+			laptop.setQuantityStock(quantity);
+			laptop.setPrice(price*Main.dola);
+			laptop.setDisplay(display);
+			laptop.setWeight(weight);
+			laptop.setSize(size);
+			laptop.setRam(ram);
+			laptop.setCpu(cpu);
+			laptop.setCard(card);
+			laptop.setMemory(memory);
+			laptop.setImage(fileName != null ? fileName : laptop.getImage());
+			
+			Category category = categoryService.findCategory(code);
+			laptop.setCategory(category);
+			
+			try {
+				laptopService.update(laptop);
+				out.print("<script language=\"javascript\">alert('Sửa sản phẩm thành công');"
+						+ "window.location.href='/myspring/manage'</script>");
+			} catch (Exception e) {
+				out.print("<script language=\"javascript\">alert('Sửa sản phẩm thất bại');"
+						+ "window.location.href='/myspring/manage'</script>");
+			}
+		}
 	}
 }

@@ -61,115 +61,115 @@
 
 .input_content,
 .orders_content {
-    color: black;
-    border: none;
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: rgba(0, 0, 0 ,0.5);
-    z-index: 1002;
-    display: none;
-  }
-  .input_content.open,
-  .orders_content.open {
-    display: block;
-  }
-  .input_content .input_content_grid {
-    max-width: 1000px;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 80px;
-    position: absolute;
-    background-color: white;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+   color: black;
+   border: none;
+   position: fixed;
+   top: 0;
+   bottom: 0;
+   left: 0;
+   right: 0;
+   background-color: rgba(0, 0, 0 ,0.5);
+   z-index: 1002;
+   display: none;
+ }
+ .input_content.open,
+ .orders_content.open {
+   display: block;
+ }
+ .input_content .input_content_grid {
+   max-width: 1000px;
+   margin-left: auto;
+   margin-right: auto;
+   padding: 80px;
+   position: absolute;
+   background-color: white;
+   left: 50%;
+   top: 50%;
+   transform: translate(-50%, -50%);
 
-  }
-  .input_content_grid i,
-  .orders_content i {
-    font-size: 36px;
-    color: black;
-    position: absolute;
-    top: 10%;
-    right: 3%;
-    cursor: pointer;
-  }
-  .input_content h2 {
-    text-align: center;
-    color: black;
-    margin: 32px 0px;
-    flex-basis: 100%;
-  }
-  .input_content > div {
-    display: flex;
-    flex-wrap: wrap;
-  }
-  .input_content > div > div {
-    flex-basis: 100%;
-    display: flex;
-    margin: 8px 0px;
-  }
-  .input_content > div > div > label {
-    flex-basis: 20%;
-    padding: 8px 0px;
-    font-size: 14px;
-  }
-  .input_content > div > div > input {
-    width: 100%;
-    height: 36px;
-    font-size: 1rem;
-    padding: 0.4rem 0.6rem;
-    background-color: var(--color-border);
-    border: 1px solid #343a4a;
-    border-radius: .2rem;
-  }
-  .input_content div input:focus {
-    outline: none;
-  }
-  .input_content div div {
-    padding: 6px 0px;
-    width: 100%;
-  }
-  .input_content div div label {
-    margin-right: 32px;
-  }
-  .input_content div input[type=file] {
-    cursor: pointer;
-    margin-left: 8px;
-    border: none;
-  }
-  .input_content > div button {
-    background-color: #00acc1;
-    border-color: #00acc1;
-    color: var(--color-title);
-    font-weight: bold;
-    padding: 10px 24px;
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s;
-    margin: 36px 0px 12px 0px;
-    border-radius: 2px;
-  }
-  .input_content > div button:focus {
-    outline: none;
-    box-shadow: 0 0 0 0.15rem rgb(38 184 202 / 50%);
-  }
-  .input_content > div button:not(:hover) {
-    box-shadow: none;
-  }
-  .input_content > div button:hover {
-    color: #fff;
-    background-color: #008a9b;
-    border-color: #007f8e;
-  }
-  .input_content > div .submit {
-    display: block;
-    width: 100%;
-    text-align: center;
-  }
+ }
+ .input_content_grid i,
+ .orders_content i {
+   font-size: 36px;
+   color: black;
+   position: absolute;
+   top: 10%;
+   right: 3%;
+   cursor: pointer;
+ }
+ .input_content h2 {
+   text-align: center;
+   color: black;
+   margin: 32px 0px;
+   flex-basis: 100%;
+ }
+ .input_content .input_content_grid {
+   display: flex;
+   flex-wrap: wrap;
+ }
+ .input_content .input_content_grid > div {
+   flex-basis: 100%;
+   display: flex;
+   margin: 8px 0px;
+ }
+ .input_content .input_content_grid > div > label {
+   flex-basis: 20%;
+   padding: 8px 0px;
+   font-size: 14px;
+ }
+ .input_content .input_content_grid > div > input {
+   width: 100%;
+   height: 36px;
+   font-size: 1rem;
+   padding: 0.4rem 0.6rem;
+   background-color: var(--color-border);
+   border: 1px solid #343a4a;
+   border-radius: .2rem;
+ }
+ .input_content div input:focus {
+   outline: none;
+ }
+ .input_content .input_content_grid div {
+   padding: 6px 0px;
+   width: 100%;
+ }
+ .input_content .input_content_grid div label {
+   margin-right: 32px;
+ }
+ .input_content div input[type=file] {
+   cursor: pointer;
+   margin-left: 8px;
+   border: none;
+ }
+ .input_content .input_content_grid button {
+   background-color: #00acc1;
+   border-color: #00acc1;
+   color: var(--color-title);
+   font-weight: bold;
+   padding: 10px 24px;
+   border: none;
+   cursor: pointer;
+   transition: all 0.2s;
+   margin: 36px 0px 12px 0px;
+   border-radius: 2px;
+ }
+ .input_content .input_content_grid button:focus {
+   outline: none;
+   box-shadow: 0 0 0 0.15rem rgb(38 184 202 / 50%);
+ }
+ .input_content .input_content_grid button:not(:hover) {
+   box-shadow: none;
+ }
+ .input_content .input_content_grid button:hover {
+   color: #fff;
+   background-color: #008a9b;
+   border-color: #007f8e;
+ }
+ .input_content .input_content_grid .submit {
+   display: block;
+   width: 100%;
+   text-align: center;
+ }
 
 .container-fluid.product .element-product {
     position: relative;

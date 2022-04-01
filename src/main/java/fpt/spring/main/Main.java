@@ -51,6 +51,10 @@ public class Main {
 	public static final int COUNT_TOP_CUSTOMER = 5;
 	public static final int SIZE_TABLE_MANAGE = 10;
 	
+	public static final String FILE_PATH_UPLOAD_IMAGE = "C:\\Users\\ADMIN\\Desktop\\kho\\Spring\\Spring_MVC_ShopFPT_1.0\\src\\main\\webapp\\resources";
+	public static final String FILE_PATH_LOCAL_IMAGE = "http://localhost:8080/myspring/resources/uploads/";
+	
+	
 	public static void main(String[] args) {
 		
 		long startTime = System.nanoTime();
@@ -70,17 +74,8 @@ public class Main {
 		List<OrderProduct> list13 = dao.getAllOrderProducts();
 		
 		
-		Collections.sort(list, new Comparator<Laptop>() {
-		    @Override
-		    public int compare(Laptop p1, Laptop p2) {
-		        return p1.getPrice() > p2.getPrice() ? -1 : (p1.getPrice() < p2.getPrice()) ? 1 : 0;
-		    }
-		});
-		
-		list.forEach(e -> {
-			System.out.println(e.getPrice());
-		});
-		
+		PhoneTab phoneTab = new PhoneTab("31231312", "IP_1234", 123, 1, null, null, null, 
+					null, null, null, null);
 		
 		long endTime   = System.nanoTime();
 		System.out.println(endTime - startTime);

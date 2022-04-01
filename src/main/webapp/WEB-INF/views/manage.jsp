@@ -541,9 +541,9 @@
                         </div>
                 </div><!-- container -->
                 
-                
                	<div class="input_content add phone tablet">
-		            <div class = "input_content_grid">
+		            <form class = "input_content_grid" action="/myspring/apimanage/product/add?line=phone" 
+		            	method = "POST" enctype="multipart/form-data" accept-charset="UTF-8">
 		                <i class="dripicons-cross" onclick="closeItem(this, 'phone')"></i>
 		                <h2 class="title">Add Smart Phone</h2>
 		                <div class = "name">
@@ -593,12 +593,13 @@
 		                <div class = "submit">
 		                    <button type="submit" onclick="submitFormAddProduct(this, 'phone')" >Nhập</button>
 		                </div>
-		            </div>
+		            </form>
 		        </div>
 		
 		
 		        <div class="input_content add laptop">
-		            <div class = "input_content_grid">
+		            <form class = "input_content_grid" action="/myspring/apimanage/product/add?line=laptop" 
+		            	method = "POST" enctype="multipart/form-data" accept-charset="UTF-8">
 		                <i class="dripicons-cross" onclick="closeItem(this, 'laptop')"></i>
 		                <h2 class="title">Add Laptop</h2>
 		                <div class = "name">
@@ -652,11 +653,12 @@
 		                <div class = "submit">
 		                    <button type="submit" onclick="submitFormAddProduct(this, 'laptop')" >Nhập</button>
 		                </div>
-		            </div>
+		            </form>
 		        </div>
 		        
 		        <div class="input_content edit phone tablet">
-		            <div class = "input_content_grid">
+		            <form class = "input_content_grid" action="/myspring/apimanage/product/edit?line=phone" 
+		            	method = "POST" enctype="multipart/form-data" accept-charset="UTF-8">
 		                <i class="dripicons-cross" onclick="closeItem(this, 'phone')"></i>
 		                <h2 class="title">Edit Smart Phone</h2>
 		                <div class = "name">
@@ -707,11 +709,12 @@
 		                <div class = "submit">
 		                    <button type="submit" onclick="submitFormEditProduct(this, 'phone')">Nhập</button>
 		                </div>
-		            </div>
+		            </form>
 		        </div>
 		
 		        <div class="input_content edit laptop">
-		            <div class = "input_content_grid">
+		            <form class = "input_content_grid" action="/myspring/apimanage/product/edit?line=laptop" 
+		            	method = "POST" enctype="multipart/form-data" accept-charset="UTF-8">
 		                <i class="dripicons-cross" onclick="closeItem(this, 'laptop')"></i>
 		                <h2 class="title">Edit Laptop</h2>
 		                <div class = "name">
@@ -766,26 +769,45 @@
 		                <div class = "submit">
 		                    <button type="submit" onclick="submitFormEditProduct(this, 'laptop')">Nhập</button>
 		                </div>
-		            </div>
+		            </form>
+		        </div>
+		        
+		        <div class="input_content edit headphone">
+		            <form action="/myspring/apimanage/add/headphone" method = "POST" class = "input_content_grid" enctype="multipart/form-data">
+		                <i class="dripicons-cross" onclick="closeItem(this, 'laptop')"></i>
+		                <h2 class="title">Edit Laptop</h2>
+		                <div class = "name">
+		                    <label for="@">Name: </label>
+		                    <input type="text" name = "name" >
+		                    <input type="text" name = "id" value = "1" style="display: none">
+		                </div>
+		                <div class="image">
+		                    <img src = "" style="height: 60px; margin-right: 44px">
+		                    <input type="file" name="image">
+		                </div>
+		                <div class = "submit">
+		                    <button type="submit">Nhập</button>
+		                </div>
+		            </form>
 		        </div>
 		        <div class="orders_content orders">
-	            <div class = "orders_content_grid">
-	                <i class="dripicons-cross" onclick="closeOrders(this)"></i>
-	                <h2 class="title">Order Details</h2>
-	                <table class = "order_product">
-	                    <thead>
-	                        <tr>
-	                            <th>Info</th>
-	                            <th>Quantity</th>
-	                            <th>Price</th>
-	                        </tr>
-	                    </thead>
-	                    <tbody>
-	                        
-	                    </tbody>
-	                </table>
-	            </div>
-	        </div>
+		            <div class = "orders_content_grid">
+		                <i class="dripicons-cross" onclick="closeOrders(this)"></i>
+		                <h2 class="title">Order Details</h2>
+		                <table class = "order_product">
+		                    <thead>
+		                        <tr>
+		                            <th>Info</th>
+		                            <th>Quantity</th>
+		                            <th>Price</th>
+		                        </tr>
+		                    </thead>
+		                    <tbody>
+		                        
+		                    </tbody>
+		                </table>
+		            </div>
+		        </div>
 			
             
 

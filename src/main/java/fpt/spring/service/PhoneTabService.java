@@ -26,6 +26,10 @@ public class PhoneTabService {
 		return phoneTabRespository.findAll();
 	}
 	
+	public PhoneTab findById(int id) {
+		return phoneTabRespository.findOne(id);
+	}
+	
 	public void save(PhoneTab phoneTab) {
 		phoneTabRespository.save(phoneTab);
     }

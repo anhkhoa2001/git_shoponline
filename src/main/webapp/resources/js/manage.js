@@ -527,7 +527,7 @@ function openEditItem(element, type, code) {
 		});
 	}
 }
-
+/*
 function getDataJSONFormAddPhoneTab(elementItem) {
 	var name = elementItem.children[0].children[2].children[1].value;
 	var code = elementItem.children[0].children[3].children[1].value;
@@ -586,8 +586,8 @@ function getDataJSONFormAddLaptop(elementItem) {
 		"file": 'http://localhost:8080/myspring/resources/images/images_shop/' + file
 	}
 	return dataJSON;
-}
-
+}*/
+/*
 function submitFormAddProduct(element, type) {
 	const elementItem = document.querySelector(".input_content.add." + type);
 	var dataJSON = null;
@@ -601,7 +601,6 @@ function submitFormAddProduct(element, type) {
 		method: 'POST',
 		headers: {
 		    'Content-Type': 'application/json; charset=UTF-8',
-		},
 		body: JSON.stringify(dataJSON),
 	})
 	.then(response => response.json())
@@ -616,8 +615,8 @@ function submitFormAddProduct(element, type) {
 		}
 	});
 }
-
-
+*/
+/*
 function submitFormEditProduct(element, type) {
 	const elementItem = document.querySelector(".input_content.edit." + type);
 	var id = elementItem.children[0].children[2].children[2].value;
@@ -648,7 +647,7 @@ function submitFormEditProduct(element, type) {
 			location.replace("/myspring/manage");
 		}
 	});
-}
+}*/
 function deleteItem(element, type, code) {
 	element.parentElement.parentElement.remove();
 	fetch("/myspring/apimanage/product/delete?line=" + type + "&code=" + code, { 
